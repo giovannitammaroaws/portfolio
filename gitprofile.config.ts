@@ -65,8 +65,8 @@ const CONFIG = {
     discord: '',
     telegram: '',
     website: '',
-    phone: '+49 1 73 65 89 568',
-    email: 't.ledeux@technologyandstrategy.com',
+    phone: '',
+    email: '',
   },
   resume: {
     fileUrl: '/portfolio/resume/Giovanni_Tammaro_Resume.pdf', // Empty fileUrl will hide the `Download Resume` button.
