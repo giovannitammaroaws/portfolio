@@ -62,7 +62,7 @@ const CONFIG = {
     email: '',
   },
   resume: {
-    fileUrl: '', // Empty fileUrl will hide the `Download Resume` button.
+    fileUrl: '/portfolio/resume/Giovanni_Tammaro_Resume.pdf', // Empty fileUrl will hide the `Download Resume` button.
   },
   skills: [
     'AWS',
