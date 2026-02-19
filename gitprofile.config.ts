@@ -59,7 +59,7 @@ const CONFIG = {
     udemy: '',
     dribbble: '',
     behance: '',
-    medium: '',
+    medium: 'giovannitammaro76',
     dev: '',
     stackoverflow: '', // example: '1/jeff-atwood'
     discord: '',
