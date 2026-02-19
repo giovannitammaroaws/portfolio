@@ -30,8 +30,6 @@ const CONFIG = {
           'giovannitammaroaws/AWS-Side-Projects',
           'giovannitammaroaws/options-greeks-showcase',
           'giovannitammaroaws/aws-secure-baseline-terraform',
-          'giovannitammaroaws/kubernetes-the-hard-way',
-          'giovannitammaroaws/DevOps-Home-Lab-2025',
         ], // List of repository names to display. example: ['arifszn/my-project1', 'arifszn/my-project2']
       },
     },
