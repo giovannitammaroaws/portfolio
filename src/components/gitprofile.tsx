@@ -169,8 +169,19 @@ const GitProfile = ({ config }: { config: Config }) => {
           headers: { 'Content-Type': 'application/vnd.github.v3+json' },
         });
         const repoData = repoResponse.data;
+        const items = repoData.items || [];
+        const itemsByFullName = new Map<string, GithubProject>();
 
-        return repoData.items;
+        items.forEach((item: any) => {
+          const fullName = String(item?.full_name || '').toLowerCase();
+          if (fullName) {
+            itemsByFullName.set(fullName, item);
+          }
+        });
+
+        return sanitizedConfig.projects.github.manual.projects
+          .map((project) => itemsByFullName.get(project.toLowerCase()))
+          .filter((item): item is GithubProject => Boolean(item));
       }
     },
     [
