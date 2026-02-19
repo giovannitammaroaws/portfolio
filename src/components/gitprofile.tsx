@@ -36,6 +36,7 @@ import PublicationCard from './publication-card';
  * @return {JSX.Element} the rendered GitProfile component
  */
 const GitProfile = ({ config }: { config: Config }) => {
+  const CACHE_TTL_MS = 1000 * 60 * 30;
   const [sanitizedConfig] = useState<SanitizedConfig | Record<string, never>>(
     getSanitizedConfig(config),
   );
@@ -44,6 +45,94 @@ const GitProfile = ({ config }: { config: Config }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [githubProjects, setGithubProjects] = useState<GithubProject[]>([]);
+  const cacheKey = `gitprofile-cache:${sanitizedConfig.github.username}`;
+
+  const getCachedData = (
+    allowStale = false,
+  ): { profile: Profile; githubProjects: GithubProject[] } | null => {
+    if (typeof window === 'undefined') {
+      return null;
+    }
+
+    try {
+      const rawCache = localStorage.getItem(cacheKey);
+      if (!rawCache) {
+        return null;
+      }
+
+      const parsedCache = JSON.parse(rawCache);
+      if (!parsedCache?.profile || !Array.isArray(parsedCache?.githubProjects)) {
+        return null;
+      }
+
+      if (
+        !allowStale &&
+        typeof parsedCache?.savedAt === 'number' &&
+        Date.now() - parsedCache.savedAt > CACHE_TTL_MS
+      ) {
+        return null;
+      }
+
+      return {
+        profile: parsedCache.profile as Profile,
+        githubProjects: parsedCache.githubProjects as GithubProject[],
+      };
+    } catch {
+      return null;
+    }
+  };
+
+  const setCachedData = (data: {
+    profile: Profile;
+    githubProjects: GithubProject[];
+  }): void => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    try {
+      localStorage.setItem(
+        cacheKey,
+        JSON.stringify({
+          ...data,
+          savedAt: Date.now(),
+        }),
+      );
+    } catch {
+      // Ignore cache write issues.
+    }
+  };
+
+  const getFallbackProfile = (): Profile => ({
+    avatar: '',
+    name: sanitizedConfig.github.username,
+    bio: '',
+    location: '',
+    company: '',
+  });
+
+  const getFallbackProjects = (): GithubProject[] => {
+    if (!sanitizedConfig.projects.github.display) {
+      return [];
+    }
+
+    if (sanitizedConfig.projects.github.mode !== 'manual') {
+      return [];
+    }
+
+    return sanitizedConfig.projects.github.manual.projects.map((project) => {
+      const repoName = project.split('/').pop() || project;
+
+      return {
+        name: repoName,
+        html_url: `https://github.com/${project}`,
+        description: 'Repository',
+        stargazers_count: '-',
+        forks_count: '-',
+        language: 'Unknown',
+      };
+    });
+  };
 
   const getGithubProjects = useCallback(
     async (publicRepoCount: number): Promise<GithubProject[]> => {
@@ -99,25 +188,53 @@ const GitProfile = ({ config }: { config: Config }) => {
     try {
       setLoading(true);
 
+      const cachedData = getCachedData();
+      if (cachedData) {
+        setProfile(cachedData.profile);
+        setGithubProjects(cachedData.githubProjects);
+        setError(null);
+        return;
+      }
+
       const response = await axios.get(
         `https://api.github.com/users/${sanitizedConfig.github.username}`,
       );
       const data = response.data;
 
-      setProfile({
+      const fetchedProfile = {
         avatar: data.avatar_url,
         name: data.name || ' ',
         bio: data.bio || '',
         location: data.location || '',
         company: data.company || '',
-      });
+      };
+      setProfile(fetchedProfile);
 
       if (!sanitizedConfig.projects.github.display) {
+        setCachedData({ profile: fetchedProfile, githubProjects: [] });
         return;
       }
 
-      setGithubProjects(await getGithubProjects(data.public_repos));
+      const fetchedProjects = await getGithubProjects(data.public_repos);
+      setGithubProjects(fetchedProjects);
+      setCachedData({ profile: fetchedProfile, githubProjects: fetchedProjects });
+      setError(null);
     } catch (error) {
+      const staleCache = getCachedData(true);
+      if (staleCache) {
+        setProfile(staleCache.profile);
+        setGithubProjects(staleCache.githubProjects);
+        setError(null);
+        return;
+      }
+
+      if (error instanceof AxiosError && error.response?.status === 403) {
+        setProfile(getFallbackProfile());
+        setGithubProjects(getFallbackProjects());
+        setError(null);
+        return;
+      }
+
       handleError(error as AxiosError | Error);
     } finally {
       setLoading(false);
@@ -126,6 +243,7 @@ const GitProfile = ({ config }: { config: Config }) => {
     sanitizedConfig.github.username,
     sanitizedConfig.projects.github.display,
     getGithubProjects,
+    cacheKey,
   ]);
 
   useEffect(() => {
