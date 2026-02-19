@@ -37,6 +37,7 @@ import PublicationCard from './publication-card';
  */
 const GitProfile = ({ config }: { config: Config }) => {
   const CACHE_TTL_MS = 1000 * 60 * 30;
+  const CACHE_SCHEMA_VERSION = 'v2';
   const [sanitizedConfig] = useState<SanitizedConfig | Record<string, never>>(
     getSanitizedConfig(config),
   );
@@ -45,7 +46,29 @@ const GitProfile = ({ config }: { config: Config }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [githubProjects, setGithubProjects] = useState<GithubProject[]>([]);
-  const cacheKey = `gitprofile-cache:${sanitizedConfig.github.username}`;
+  const cacheSignature = [
+    sanitizedConfig.projects.github.mode,
+    sanitizedConfig.projects.github.display ? '1' : '0',
+    sanitizedConfig.projects.github.manual.projects.join(','),
+    sanitizedConfig.projects.github.automatic.sortBy,
+    String(sanitizedConfig.projects.github.automatic.limit),
+    sanitizedConfig.projects.github.automatic.exclude.forks ? '1' : '0',
+    sanitizedConfig.projects.github.automatic.exclude.projects.join(','),
+  ].join('|');
+
+  const getCacheHash = (value: string): string => {
+    let hash = 0;
+
+    for (let i = 0; i < value.length; i++) {
+      hash = (hash * 31 + value.charCodeAt(i)) % 1000000007;
+    }
+
+    return String(hash);
+  };
+
+  const cacheKey = `gitprofile-cache:${sanitizedConfig.github.username}:${CACHE_SCHEMA_VERSION}:${getCacheHash(
+    cacheSignature,
+  )}`;
 
   const getCachedData = (
     allowStale = false,
