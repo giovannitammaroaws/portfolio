@@ -16,7 +16,7 @@ const CONFIG = {
       header: 'GitHub Projects',
       mode: 'automatic', // Mode can be: 'automatic' or 'manual'
       automatic: {
-        sortBy: 'updated', // Sort projects by 'stars' or 'updated'
+        sortBy: 'stars', // Sort projects by 'stars' or 'updated'
         limit: 8, // How many projects to display.
         exclude: {
           forks: true, // Forked projects will not be displayed if set to true.
@@ -83,7 +83,26 @@ const CONFIG = {
   experiences: [],
   certifications: [],
   educations: [],
-  publications: [],
+  publications: [
+    {
+      title: 'Host a resume on AWS Static Website',
+      conferenceName: '',
+      journalName: 'Medium',
+      authors: 'Giovanni Tammaro',
+      link: 'https://medium.com/@giovannitammaro76/host-a-resume-on-aws-static-website-6c26542bd551',
+      description:
+        'End-to-end guide to host a static resume on AWS using S3, CloudFront, Route 53, and ACM with practical setup and cleanup steps.',
+    },
+    {
+      title: 'Atlas AI RAG Financial Showcase',
+      conferenceName: '',
+      journalName: 'GitHub',
+      authors: 'Giovanni Tammaro',
+      link: 'https://github.com/giovannitammaroaws/atlas-ai-rag-financial-showcase',
+      description:
+        'Production-oriented financial RAG platform with FastAPI, React, PostgreSQL + pgvector, multi-provider LLM routing, and cost-aware operations.',
+    },
+  ],
   // Display articles from your medium or dev account. (Optional)
   blog: {
     source: 'medium', // medium | dev
@@ -96,7 +115,7 @@ const CONFIG = {
   // Track visitor interaction and behavior. https://www.hotjar.com
   hotjar: { id: '', snippetVersion: 6 },
   themeConfig: {
-    defaultTheme: 'lofi',
+    defaultTheme: 'dark',
 
     // Hides the switch in the navbar
     // Useful if you want to support a single color mode
