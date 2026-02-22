@@ -90,6 +90,15 @@ const CONFIG = {
   educations: [],
   publications: [
     {
+      title: 'Building a Gift Recommendation Agent with Amazon Bedrock',
+      conferenceName: '',
+      journalName: 'Medium',
+      authors: 'Giovanni Tammaro',
+      link: 'https://medium.com/@giovannitammaro76/building-a-gift-recommendation-agent-with-amazon-bedrock-6de5da26a095',
+      description:
+        'Workshop guide to build a gift recommendation agent on Amazon Bedrock with actions, knowledge base, and multi-agent orchestration.',
+    },
+    {
       title: 'Host a resume on AWS Static Website',
       conferenceName: '',
       journalName: 'Medium',
