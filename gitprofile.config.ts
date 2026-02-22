@@ -71,6 +71,7 @@ const CONFIG = {
   },
   skills: [
     'AWS',
+    'AWS Bedrock',
     'Cloud Architecture',
     'Network Engineering',
     'Terraform',
