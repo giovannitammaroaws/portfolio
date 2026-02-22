@@ -105,7 +105,7 @@ const CONFIG = {
       authors: 'Giovanni Tammaro',
       link: 'https://medium.com/@giovannitammaro76/building-a-gift-recommendation-agent-with-amazon-bedrock-6de5da26a095',
       description:
-        'Workshop guide to build a gift recommendation agent on Amazon Bedrock with actions, knowledge base, and multi-agent orchestration.',
+        'Workshop hands-on su Amazon Bedrock: agenti, action groups, knowledge base e collaborazione multi-agent.',
     },
   ],
   // Display articles from your medium or dev account. (Optional)
