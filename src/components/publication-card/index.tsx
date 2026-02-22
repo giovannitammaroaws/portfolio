@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import { AiOutlineBook } from 'react-icons/ai';
 import { SanitizedPublication } from '../../interfaces/sanitized-config';
 import { skeleton } from '../../utils';
@@ -10,9 +10,20 @@ const PublicationCard = ({
   publications: SanitizedPublication[];
   loading: boolean;
 }) => {
+  const [showAll, setShowAll] = useState(false);
+  const maxVisible = 2;
+  const hasMore = publications.length > maxVisible;
+  const visiblePublications = useMemo(
+    () => (showAll ? publications : publications.slice(0, maxVisible)),
+    [publications, showAll],
+  );
   const renderSkeleton = () => {
+    const skeletonCount = Math.min(
+      publications.length || maxVisible,
+      maxVisible,
+    );
     const array = [];
-    for (let index = 0; index < publications.length; index++) {
+    for (let index = 0; index < skeletonCount; index++) {
       array.push(
         <div className="card shadow-md card-sm bg-base-100" key={index}>
           <div className="p-8 h-full w-full">
@@ -75,7 +86,7 @@ const PublicationCard = ({
   };
 
   const renderPublications = () => {
-    return publications.map((item, index) => (
+    return visiblePublications.map((item, index) => (
       <a
         className="card shadow-md card-sm bg-base-100 cursor-pointer"
         key={index}
@@ -140,12 +151,12 @@ const PublicationCard = ({
                   <h3 className="text-base sm:text-lg font-bold text-base-content truncate">
                     {loading
                       ? skeleton({ widthCls: 'w-40', heightCls: 'h-8' })
-                      : 'Publications'}
+                      : 'My Articles'}
                   </h3>
                   <div className="text-base-content/60 text-xs sm:text-sm mt-1 truncate">
                     {loading
                       ? skeleton({ widthCls: 'w-32', heightCls: 'h-4' })
-                      : `Showcasing ${publications.length} publications`}
+                      : `Showcasing ${publications.length} articles`}
                   </div>
                 </div>
               </div>
@@ -153,6 +164,16 @@ const PublicationCard = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {loading ? renderSkeleton() : renderPublications()}
             </div>
+            {!loading && hasMore && (
+              <div className="mt-6 flex justify-center">
+                <button
+                  className="btn btn-outline btn-sm"
+                  onClick={() => setShowAll((prev) => !prev)}
+                >
+                  {showAll ? 'View Less' : 'View More'}
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
