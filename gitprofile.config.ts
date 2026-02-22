@@ -90,15 +90,6 @@ const CONFIG = {
   educations: [],
   publications: [
     {
-      title: 'Building a Gift Recommendation Agent with Amazon Bedrock',
-      conferenceName: '',
-      journalName: 'Medium',
-      authors: 'Giovanni Tammaro',
-      link: 'https://medium.com/@giovannitammaro76/building-a-gift-recommendation-agent-with-amazon-bedrock-6de5da26a095',
-      description:
-        'Workshop guide to build a gift recommendation agent on Amazon Bedrock with actions, knowledge base, and multi-agent orchestration.',
-    },
-    {
       title: 'Host a resume on AWS Static Website',
       conferenceName: '',
       journalName: 'Medium',
@@ -108,13 +99,13 @@ const CONFIG = {
         'End-to-end guide to host a static resume on AWS using S3, CloudFront, Route 53, and ACM with practical setup and cleanup steps.',
     },
     {
-      title: 'Atlas AI RAG Financial Showcase',
+      title: 'Building a Gift Recommendation Agent with Amazon Bedrock',
       conferenceName: '',
-      journalName: 'GitHub',
+      journalName: 'Medium',
       authors: 'Giovanni Tammaro',
-      link: 'https://github.com/giovannitammaroaws/atlas-ai-rag-financial-showcase',
+      link: 'https://medium.com/@giovannitammaro76/building-a-gift-recommendation-agent-with-amazon-bedrock-6de5da26a095',
       description:
-        'Production-oriented financial RAG platform with FastAPI, React, PostgreSQL + pgvector, multi-provider LLM routing, and cost-aware operations.',
+        'Workshop guide to build a gift recommendation agent on Amazon Bedrock with actions, knowledge base, and multi-agent orchestration.',
     },
   ],
   // Display articles from your medium or dev account. (Optional)
