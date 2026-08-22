@@ -78,7 +78,6 @@ const CONFIG = {
     'Containers',
     'Python',
     'FastAPI',
-    'TypeScript',
     'React',
     'PostgreSQL',
     'RAG',
