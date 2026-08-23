@@ -237,7 +237,7 @@ const GitProfile = ({ config }: { config: Config }) => {
       const fetchedProfile = {
         avatar: data.avatar_url,
         name: data.name || ' ',
-        bio: 'AWS GenAI | AI Infra Engineer (ex. Amazon)',
+        bio: 'AWS GenAI | AI Infra Engineer\n(ex. Amazon)',
         location: 'Europe',
         company: data.company || '',
       };
