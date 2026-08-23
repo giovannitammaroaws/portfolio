@@ -36,7 +36,7 @@ import PublicationCard from './publication-card';
  */
 const GitProfile = ({ config }: { config: Config }) => {
   const CACHE_TTL_MS = 1000 * 60 * 30;
-  const CACHE_SCHEMA_VERSION = 'v3';
+  const CACHE_SCHEMA_VERSION = 'v4';
   const [sanitizedConfig] = useState<SanitizedConfig | Record<string, never>>(
     getSanitizedConfig(config),
   );
